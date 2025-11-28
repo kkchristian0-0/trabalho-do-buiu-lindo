@@ -1,0 +1,1252 @@
+/* ============================================================================================================
+    STYLE.CSS: ESTILIZAÇÃO CINEMATOGRÁFICA E ACESSIBILIDADE-FIRST
+    Total de linhas planejado: > 2000
+    ------------------------------------------------------------------------------------------------------------
+    Estrutura:
+    1. Variáveis CSS (Custom Properties)
+    2. Reset e Estilos Base
+    3. Tipografia (Tipographic System)
+    4. Layout Geral (Grid, Flex, Responsividade Base)
+    5. Componentes de Acessibilidade (Focus, Visually Hidden)
+    6. Tema Splash Screen (Intro)
+    7. Componentes Header e Navegação
+    8. Componentes Cards (Redaction Grid)
+    9. Componentes Modais (Read Modal e Lightbox)
+    10. Componentes de Acessibilidade (Settings Panel)
+    11. Componentes Galeria (SVG Generation & Lightbox)
+    12. Footer e Utilitários
+    13. Temas (Dark Mode, High Contrast)
+    14. Animações e Efeitos (Keyframes e Reduced Motion)
+    15. Estilos de Impressão (Print Styles)
+    ============================================================================================================
+*/
+
+/* ------------------------------------------------------------------------------------------------------------
+    1. VARIÁVEIS CSS (CUSTOM PROPERTIES) - Sistema de Design Modular
+    ------------------------------------------------------------------------------------------------------------
+*/
+:root {
+    /* Paleta Principal: Azul Marinho e Branco (Requisito) */
+    --color-primary: #0b2545; /* Azul Marinho Principal */
+    --color-primary-light: #164077;
+    --color-primary-dark: #07192d;
+    --color-secondary: #007bff; /* Azul de Destaque */
+    --color-accent: #ffb703; /* Amarelo/Dourado (Cinematográfico) */
+    --color-text-light: #ffffff;
+    --color-text-dark: #333333;
+    --color-background-light: #f4f4f9;
+    --color-background-dark: #121212;
+    --color-card-bg: #ffffff;
+    --color-card-border: #e0e0e0;
+    --color-focus: #00ccff; /* Foco de Acessibilidade (Ciano/Brilhante) */
+
+    /* Variáveis de Tema (Adaptáveis) */
+    --theme-bg: var(--color-background-light);
+    --theme-text: var(--color-text-dark);
+    --theme-card-bg: var(--color-card-bg);
+    --theme-card-border: var(--color-card-border);
+    --theme-shadow-l1: 0 4px 10px rgba(0, 0, 0, 0.05);
+    --theme-shadow-l2: 0 8px 25px rgba(0, 0, 0, 0.15);
+
+    /* Tipografia - Escala Modular Baseada em 1.25 (Major Third) */
+    --font-size-base: 1rem;
+    --font-size-scale: 1.25;
+    --font-size-xs: calc(var(--font-size-base) / var(--font-size-scale));
+    --font-size-sm: var(--font-size-base);
+    --font-size-md: calc(var(--font-size-base) * var(--font-size-scale));
+    --font-size-lg: calc(var(--font-size-base) * var(--font-size-scale) * var(--font-size-scale));
+    --font-size-xl: calc(var(--font-size-base) * var(--font-size-scale) * var(--font-size-scale) * var(--font-size-scale));
+
+    --font-family-body: 'Inter', sans-serif;
+    --font-family-heading: 'Montserrat', serif;
+
+    /* Espaçamentos */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 3rem;
+
+    /* Transições e Animações */
+    --transition-speed: 0.3s;
+    --transition-timing: ease-in-out;
+    --tilt-perspective: 1000px;
+}
+
+/* ------------------------------------------------------------------------------------------------------------
+    2. RESET E ESTILOS BASE
+    ------------------------------------------------------------------------------------------------------------
+*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Reset de Foco para melhor acessibilidade (Usar focus-visible) */
+:focus {
+    outline: none;
+}
+
+/* 3. TIPOGRAFIA (TIPOGRAPHIC SYSTEM) e Estilos Base
+*/
+body {
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-base);
+    line-height: 1.6; /* Line-height padrão */
+    color: var(--theme-text);
+    background-color: var(--theme-bg);
+    transition: background-color var(--transition-speed), color var(--transition-speed);
+    min-height: 100vh;
+    scroll-behavior: smooth;
+}
+
+/* Variáveis de Acessibilidade (Line Height) */
+body[data-line-height="compact"] { line-height: 1.35; }
+body[data-line-height="default"] { line-height: 1.6; }
+body[data-line-height="relaxed"] { line-height: 2.0; }
+
+/* Variáveis de Acessibilidade (Font Scale) */
+body[data-font-scale="small"] { --font-size-base: 0.875rem; }
+body[data-font-scale="medium"] { --font-size-base: 1rem; }
+body[data-font-scale="large"] { --font-size-base: 1.125rem; }
+body[data-font-scale="extralarge"] { --font-size-base: 1.25rem; }
+
+h1, h2, h3, h4 {
+    font-family: var(--font-family-heading);
+    line-height: 1.2;
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-primary-light);
+    transition: color var(--transition-speed);
+}
+
+h1 { font-size: var(--font-size-xl); }
+h2 { font-size: var(--font-size-lg); }
+h3 { font-size: var(--font-size-md); }
+
+p {
+    margin-bottom: var(--spacing-md);
+    transition: color var(--transition-speed);
+}
+
+a {
+    color: var(--color-secondary);
+    text-decoration: none;
+    transition: color var(--transition-speed), opacity var(--transition-speed);
+}
+
+a:hover {
+    opacity: 0.8;
+}
+
+/* ------------------------------------------------------------------------------------------------------------
+    4. LAYOUT GERAL (GRID, FLEX, RESPONSIVIDADE BASE)
+    ------------------------------------------------------------------------------------------------------------
+*/
+.main-interface {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 1s var(--transition-timing), transform 1s var(--transition-timing);
+    min-height: 100vh;
+    padding-top: 120px; /* Espaço para o header fixo */
+}
+
+/* Main Content Area */
+#app-main {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: var(--spacing-lg);
+}
+
+/* Estrutura de Rota/Seção */
+.app-section {
+    display: none;
+    animation: fadeIn 0.8s var(--transition-timing);
+    padding: var(--spacing-xl) 0;
+    min-height: 60vh;
+}
+
+.app-section.active {
+    display: block;
+}
+
+/* Títulos de Seção Cinematográficos */
+.section-title {
+    font-size: var(--font-size-xl);
+    text-align: center;
+    margin-bottom: var(--spacing-xs);
+    position: relative;
+    /* Efeito de texto sutil com gradiente/sombra */
+    text-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.section-subtitle {
+    text-align: center;
+    color: var(--color-secondary);
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--spacing-xl);
+    opacity: 0.7;
+}
+
+/* ------------------------------------------------------------------------------------------------------------
+    5. COMPONENTES DE ACESSIBILIDADE E UTILITÁRIOS
+    ------------------------------------------------------------------------------------------------------------
+*/
+.visually-hidden:not(:focus):not(:active) {
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+}
+
+/* Focus visível aprimorado para Acessibilidade */
+button:focus-visible, 
+a:focus-visible, 
+input:focus-visible, 
+article:focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 3px;
+    border-radius: 4px;
+}
+
+/* Estilo Base para Botões Cinematográficos */
+.cinematic-button {
+    background-color: var(--color-primary-light);
+    color: var(--color-text-light);
+    border: none;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: transform var(--transition-speed), background-color var(--transition-speed), box-shadow var(--transition-speed);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.cinematic-button:hover {
+    background-color: var(--color-secondary);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.cinematic-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.primary-button {
+    background-color: var(--color-accent);
+    color: var(--color-text-dark);
+}
+
+.primary-button:hover {
+    background-color: #fca311;
+}
+
+.secondary-button {
+    background-color: var(--color-primary);
+    border: 1px solid var(--color-primary-light);
+}
+
+/* ------------------------------------------------------------------------------------------------------------
+    6. TEMA SPLASH SCREEN (INTRO CINEMATOGRÁFICA)
+    ------------------------------------------------------------------------------------------------------------
+*/
+.splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--color-primary-dark);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    overflow: hidden;
+    transition: opacity 1s ease-out, transform 1s ease-out;
+}
+
+/* Efeito de 'filme antigo' */
+.splash-screen::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.5) 100%);
+    pointer-events: none;
+    z-index: 10;
+}
+
+.splash-content {
+    text-align: center;
+    color: var(--color-text-light);
+    z-index: 20;
+    max-width: 80%;
+}
+
+.splash-title {
+    font-size: 3.5rem; /* Base para mobile */
+    font-weight: 900;
+    margin-bottom: var(--spacing-xl);
+    overflow: hidden;
+    white-space: nowrap;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.splash-title span {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(100%);
+    animation: textReveal 0.1s forwards calc(var(--i) * 0.1s);
+}
+
+@keyframes textReveal {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.splash-controls {
+    display: flex;
+    gap: var(--spacing-lg);
+    justify-content: center;
+}
+
+.splash-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* ------------------------------------------------------------------------------------------------------------
+    7. COMPONENTES HEADER E NAVEGAÇÃO
+    ------------------------------------------------------------------------------------------------------------
+*/
+.main-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background: var(--color-primary);
+    box-shadow: var(--theme-shadow-l2);
+    transition: all 0.4s var(--transition-timing);
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md) var(--spacing-lg);
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Header Compactado (Scroll State) */
+.main-header.scrolled {
+    padding: var(--spacing-xs) 0;
+    background: var(--color-primary-dark);
+}
+
+.header-logo-group {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.site-logo {
+    width: 50px;
+    height: 50px;
+    min-width: 50px;
+}
+
+.header-titles {
+    color: var(--color-text-light);
+    line-height: 1.1;
+}
+
+.college-title {
+    font-size: var(--font-size-sm);
+    opacity: 0.7;
+    display: block;
+}
+
+.student-name {
+    font-size: var(--font-size-md);
+    margin: 0;
+    color: var(--color-accent);
+}
+
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+/* Busca */
+.search-box {
+    display: flex;
+    border-radius: 20px;
+    overflow: hidden;
+    background-color: var(--color-primary-light);
+    border: 1px solid var(--color-primary-light);
+}
+
+#card-search {
+    padding: var(--spacing-xs) var(--spacing-md);
+    border: none;
+    background: transparent;
+    color: var(--color-text-light);
+    font-size: var(--font-size-sm);
+    width: 250px;
+    transition: width 0.3s;
+}
+
+#card-search::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.search-btn {
+    background: var(--color-accent);
+    color: var(--color-text-dark);
+    border: none;
+    padding: var(--spacing-xs) var(--spacing-md);
+    cursor: pointer;
+}
+
+/* Navegação */
+.main-nav {
+    background-color: var(--color-primary-dark);
+    padding: 0 var(--spacing-lg);
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.nav-links li a {
+    color: var(--color-text-light);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    display: block;
+    font-weight: 600;
+    text-transform: uppercase;
+    transition: background-color var(--transition-speed), color var(--transition-speed);
+    border-bottom: 3px solid transparent;
+}
+
+.nav-links li a.active {
+    background-color: var(--color-primary-light);
+    border-bottom-color: var(--color-accent);
+    color: var(--color-accent);
+}
+
+.nav-links li a:hover {
+    background-color: var(--color-primary-light);
+}
+
+/* Toggle Menu Hamburguer (Mobile only) */
+.menu-toggle {
+    display: none; /* Oculto em desktop */
+    width: 40px;
+    height: 40px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    position: relative;
+    z-index: 1010;
+}
+
+.icon-bar {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: var(--color-text-light);
+    margin: 5px auto;
+    transition: all 0.3s var(--transition-timing);
+}
+
+/* Animação do Hamburguer para X */
+.menu-toggle.is-active .icon-bar:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-toggle.is-active .icon-bar:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
+
+.menu-toggle.is-active .icon-bar:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+}
+
+/* Scroll Progress Indicator */
+.scroll-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: var(--color-accent);
+    width: 0%;
+    transition: background 0.3s;
+}
+
+/* ------------------------------------------------------------------------------------------------------------
+    8. COMPONENTES CARDS (REDACTION GRID)
+    ------------------------------------------------------------------------------------------------------------
+*/
+.redaction-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+    padding: var(--spacing-md) 0;
+    perspective: var(--tilt-perspective); /* Necessário para 3D Tilt */
+}
+
+.redaction-card {
+    background-color: var(--theme-card-bg);
+    border: 1px solid var(--theme-card-border);
+    border-radius: 12px;
+    overflow: hidden;
+    padding: var(--spacing-lg);
+    transition: transform 0.3s var(--transition-timing), box-shadow 0.3s var(--transition-timing);
+    box-shadow: var(--theme-shadow-l1);
+    position: relative;
+    cursor: pointer;
+    /* Configuração inicial para o Intersection Observer */
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+    will-change: transform, opacity;
+}
+
+/* Animação de entrada via Intersection Observer */
+.redaction-card.in-view {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+/* Efeito 3D Tilt ao Hover */
+.redaction-card:hover {
+    box-shadow: var(--theme-shadow-l2);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+}
+
+.card-number {
+    font-size: var(--font-size-xl);
+    font-weight: 900;
+    color: var(--color-accent);
+    line-height: 1;
+    opacity: 0.8;
+}
+
+.card-title {
+    margin: 0;
+    font-size: var(--font-size-md);
+    color: var(--color-primary-light);
+}
+
+.card-summary {
+    font-size: var(--font-size-sm);
+    color: var(--theme-text);
+    margin-bottom: var(--spacing-md);
+    min-height: 100px; /* Garante tamanho uniforme */
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--theme-card-border);
+}
+
+.card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+    max-width: 60%;
+}
+
+.tag {
+    font-size: var(--font-size-xs);
+    background-color: var(--color-secondary);
+    color: var(--color-text-light);
+    padding: 2px 8px;
+    border-radius: 10px;
+    opacity: 0.7;
+}
+
+.card-actions {
+    display: flex;
+    gap: var(--spacing-xs);
+}
+
+.favorite-btn {
+    background: none;
+    border: 1px solid var(--color-primary-light);
+    color: var(--color-primary-light);
+    padding: var(--spacing-xs);
+    width: 35px;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: var(--font-size-md);
+}
+
+.favorite-btn.is-favorite {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+    animation: pulse 0.5s ease-in-out;
+}
+
+/* Estilos para o Empty State e Loading */
+.loading-state, .empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: var(--spacing-xl);
+    color: var(--color-primary-light);
+    font-style: italic;
+    opacity: 0.8;
+}
+
+/* ------------------------------------------------------------------------------------------------------------
+    9. COMPONENTES MODAIS (READ MODAL E LIGHTBOX)
+    ------------------------------------------------------------------------------------------------------------
+*/
+.app-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 2000;
+    display: none;
+    overflow-y: auto;
+    backdrop-filter: blur(5px);
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.app-modal[aria-hidden="false"] {
+    display: block;
+}
+
+.modal-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.modal-content {
+    background-color: var(--theme-bg);
+    max-width: 900px;
+    margin: var(--spacing-xl) auto;
+    padding: var(--spacing-xl);
+    border-radius: 10px;
+    position: relative;
+    transform: scale(0.95) translateY(20px);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Animação 'pop' */
+    box-shadow: var(--theme-shadow-l2);
+}
+
+.app-modal[aria-hidden="false"] .modal-content {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+}
+
+.modal-close-btn {
+    position: absolute;
+    top: var(--spacing-md);
+    right: var(--spacing-md);
+    background: var(--color-primary-dark);
+    color: var(--color-text-light);
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    font-size: var(--font-size-md);
+    z-index: 10;
+}
+
+.modal-header {
+    border-bottom: 2px solid var(--color-accent);
+    padding-bottom: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+}
+
+.modal-title {
+    font-size: var(--font-size-lg);
+    color: var(--color-primary);
+}
+
+.modal-theme-name {
+    display: block;
+    font-size: var(--font-size-sm);
+    color: var(--color-secondary);
+}
+
+.modal-body-text {
+    max-height: 70vh;
+    overflow-y: auto;
+    padding-right: var(--spacing-md); /* Espaço para o scrollbar */
+}
+
+.modal-body-text p {
+    text-indent: var(--spacing-lg);
+    text-align: justify;
+}
+
+.modal-footer {
+    margin-top: var(--spacing-lg);
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--spacing-md);
+    border-top: 1px solid var(--theme-card-border);
+    padding-top: var(--spacing-md);
+}
+
+/* Estilo específico para Lightbox */
+.lightbox-modal .modal-content {
+    max-width: 1200px;
+    padding: var(--spacing-md);
+    background: transparent;
+    box-shadow: none;
+}
+
+.lightbox-image-container {
+    background-color: var(--color-primary-dark);
+    border-radius: 8px;
+    overflow: hidden;
+    max-height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.lightbox-image-container svg {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* ------------------------------------------------------------------------------------------------------------
+    10. COMPONENTES DE ACESSIBILIDADE (SETTINGS PANEL)
+    ------------------------------------------------------------------------------------------------------------
+*/
+.accessibility-controls-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.control-panel {
+    background-color: var(--theme-card-bg);
+    border: 1px solid var(--theme-card-border);
+    padding: var(--spacing-lg);
+    border-radius: 8px;
+    box-shadow: var(--theme-shadow-l1);
+}
+
+.control-panel h3 {
+    color: var(--color-accent);
+    margin-bottom: var(--spacing-sm);
+    border-bottom: 1px solid var(--theme-card-border);
+    padding-bottom: var(--spacing-xs);
+}
+
+.control-group {
+    display: flex;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+    align-items: center;
+    margin-top: var(--spacing-md);
+}
+
+.control-group .cinematic-button.active {
+    background-color: var(--color-accent);
+    color: var(--color-text-dark);
+    border: 1px solid var(--color-primary-dark);
+}
+
+.font-size-indicator {
+    padding: 0 var(--spacing-sm);
+    font-weight: 700;
+    color: var(--color-primary-light);
+}
+
+/* ------------------------------------------------------------------------------------------------------------
+    11. COMPONENTES GALERIA (SVG Generation & Lightbox)
+    ------------------------------------------------------------------------------------------------------------
+*/
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: var(--spacing-md);
+}
+
+.gallery-item {
+    background-color: var(--color-primary-dark);
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    box-shadow: var(--theme-shadow-l2);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.gallery-item:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 20px var(--color-accent);
+}
+
+.gallery-svg-container {
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    padding: var(--spacing-md);
+}
+
+.gallery-svg-container svg {
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+}
+
+.gallery-caption {
+    background-color: rgba(0, 0, 0, 0.7);
+    color: var(--color-text-light);
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size-sm);
+    text-align: center;
+    margin: 0;
+}
+
+.lightbox-btn {
+    position: absolute;
+    top: var(--spacing-md);
+    right: var(--spacing-md);
+    background-color: var(--color-accent);
+    color: var(--color-text-dark);
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.gallery-item:hover .lightbox-btn {
+    opacity: 1;
+}
+
+/* ------------------------------------------------------------------------------------------------------------
+    12. FOOTER E UTILITÁRIOS
+    ------------------------------------------------------------------------------------------------------------
+*/
+.main-footer {
+    background-color: var(--color-primary-dark);
+    color: var(--color-text-light);
+    padding: var(--spacing-xl) var(--spacing-lg);
+    margin-top: var(--spacing-xl);
+    font-size: var(--font-size-sm);
+    border-top: 5px solid var(--color-accent);
+}
+
+.footer-content-wrap {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--spacing-lg);
+    padding-bottom: var(--spacing-lg);
+}
+
+.footer-credits p {
+    margin-bottom: var(--spacing-sm);
+}
+
+.credit-label {
+    font-weight: 700;
+    color: var(--color-accent);
+}
+
+.footer-copyright {
+    text-align: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: var(--spacing-md);
+}
+
+/* ------------------------------------------------------------------------------------------------------------
+    13. TEMAS (DARK MODE, HIGH CONTRAST)
+    ------------------------------------------------------------------------------------------------------------
+*/
+
+/* DARK MODE */
+body[data-theme="dark"] {
+    --theme-bg: var(--color-background-dark);
+    --theme-text: var(--color-text-light);
+    --theme-card-bg: #1e1e1e;
+    --theme-card-border: #333333;
+    --color-primary: #1e3a5f; /* Azul mais suave no Dark */
+    --color-primary-light: #2a588a;
+    --theme-shadow-l1: 0 4px 10px rgba(0, 0, 0, 0.4);
+    --theme-shadow-l2: 0 8px 25px rgba(0, 0, 0, 0.6);
+}
+
+body[data-theme="dark"] h1, 
+body[data-theme="dark"] h2, 
+body[data-theme="dark"] h3 {
+    color: var(--color-accent);
+}
+
+/* HIGH CONTRAST MODE */
+body[data-theme="contrast"] {
+    --theme-bg: #000000;
+    --theme-text: #ffffff;
+    --theme-card-bg: #111111;
+    --theme-card-border: #ffffff;
+    --color-primary: #000000;
+    --color-primary-light: #000000;
+    --color-secondary: #ff00ff; /* Magenta para links */
+    --color-accent: #00ffff; /* Ciano para destaque */
+    --theme-shadow-l1: none;
+    --theme-shadow-l2: none;
+    border: 5px solid #ffffff; /* Borda grossa de alto contraste */
+}
+
+body[data-theme="contrast"] .cinematic-button {
+    background-color: #ffffff;
+    color: #000000;
+    border: 3px solid #000000;
+    font-weight: 900;
+    box-shadow: none;
+}
+
+body[data-theme="contrast"] .primary-button {
+    background-color: var(--color-accent);
+    color: #000000;
+}
+
+/* Preferência de Esquema de Cores (Nativa) */
+@media (prefers-color-scheme: dark) {
+    /* Aplica o dark mode nativo se o usuário não escolheu explicitamente */
+    body:not([data-theme="light"]):not([data-theme="contrast"]) {
+        --theme-bg: var(--color-background-dark);
+        --theme-text: var(--color-text-light);
+        --theme-card-bg: #1e1e1e;
+        --theme-card-border: #333333;
+        --color-primary: #1e3a5f;
+        --color-primary-light: #2a588a;
+    }
+}
+
+/* ------------------------------------------------------------------------------------------------------------
+    14. ANIMAÇÕES E EFEITOS (KEYFRAMES E REDUCED MOTION)
+    ------------------------------------------------------------------------------------------------------------
+*/
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+/* Media Query para `prefers-reduced-motion` */
+@media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .redaction-card {
+        transform: none !important;
+        transition: none !important;
+        opacity: 1 !important;
+    }
+
+    .splash-screen {
+        opacity: 0;
+        visibility: hidden;
+        display: none !important;
+    }
+
+    .main-interface {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* ------------------------------------------------------------------------------------------------------------
+    15. ESTILOS DE IMPRESSÃO (PRINT STYLES)
+    ------------------------------------------------------------------------------------------------------------
+*/
+@media print {
+    /* Ocultar elementos não essenciais para impressão */
+    .main-header, 
+    .main-nav, 
+    .search-box, 
+    .footer-actions, 
+    .app-modal .modal-footer, 
+    .accessibility-controls-grid, 
+    .redaction-card .card-actions,
+    .redaction-card .card-tags,
+    #scroll-progress,
+    #particles-canvas {
+        display: none !important;
+    }
+
+    body {
+        background-color: white !important;
+        color: black !important;
+        font-size: 12pt !important;
+        line-height: 1.5 !important;
+    }
+    
+    /* Mostrar apenas o conteúdo do modal de impressão se estiver aberto */
+    body > * {
+        display: none;
+    }
+    
+    #read-modal[aria-hidden="false"] {
+        display: block !important;
+        position: static !important;
+        height: auto !important;
+        width: auto !important;
+        overflow: visible !important;
+        background: none !important;
+    }
+    
+    #read-modal .modal-content {
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        transform: none !important;
+        opacity: 1 !important;
+        transition: none !important;
+    }
+
+    #modal-body-text {
+        max-height: none !important;
+        overflow-y: visible !important;
+        padding-right: 0 !important;
+    }
+
+    .app-section.active, main {
+        display: block !important;
+        page-break-after: always; /* Cada seção em uma nova página (opcional, para organização) */
+        padding: 0 !important;
+    }
+    
+    h1, h2, h3 {
+        color: #000000 !important;
+        page-break-after: avoid;
+        page-break-inside: avoid;
+    }
+
+    /* Rodapé minimalista */
+    .main-footer {
+        display: block !important;
+        position: static;
+        border-top: 1px solid #000;
+        color: #000;
+        background-color: #fff;
+        text-align: center;
+        margin-top: 20px;
+    }
+    
+    .footer-credits {
+        display: block;
+        padding-bottom: 0;
+    }
+    
+    .footer-credits p {
+        margin: 0;
+    }
+}
+
+/* ------------------------------------------------------------------------------------------------------------
+    MEDIA QUERIES (RESPONSIVIDADE COMPLETA)
+    ------------------------------------------------------------------------------------------------------------
+*/
+
+/* 1. Mobile (<= 768px) */
+@media (max-width: 768px) {
+    :root {
+        --font-size-base: 0.95rem;
+    }
+
+    .main-interface {
+        padding-top: 100px; /* Ajuste para header mobile */
+    }
+
+    .splash-title {
+        font-size: 2rem;
+        white-space: normal;
+    }
+
+    .header-content {
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .header-titles {
+        flex-basis: 100%;
+        text-align: center;
+        padding-bottom: var(--spacing-xs);
+    }
+    
+    .header-logo-group {
+        width: 100%;
+        justify-content: center;
+        order: -1;
+    }
+
+    .site-logo {
+        display: none;
+    }
+
+    .header-controls {
+        width: 100%;
+        justify-content: center;
+        gap: var(--spacing-sm);
+        margin-top: var(--spacing-sm);
+    }
+
+    .search-box {
+        width: 80%;
+    }
+    
+    #card-search {
+        width: 100%;
+    }
+
+    .menu-toggle {
+        display: block; /* Mostrar hamburguer */
+    }
+    
+    .main-nav {
+        /* Menu mobile escondido por padrão */
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease-in-out;
+        width: 100%;
+        position: absolute;
+        top: 100px; /* Abaixo do header */
+        z-index: 999;
+    }
+    
+    .main-nav.is-active {
+        max-height: 400px; /* Altura suficiente para mostrar todos os links */
+    }
+    
+    .nav-links {
+        flex-direction: column;
+        padding: var(--spacing-sm) 0;
+    }
+    
+    .nav-links li a {
+        padding: var(--spacing-md);
+        text-align: center;
+        border-bottom: 1px solid var(--color-primary-light);
+    }
+
+    .redaction-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .card-footer {
+        flex-direction: column;
+        align-items: center;
+        gap: var(--spacing-md);
+    }
+    
+    .card-tags {
+        max-width: 100%;
+        justify-content: center;
+    }
+    
+    .modal-content {
+        margin: var(--spacing-md) auto;
+        padding: var(--spacing-lg);
+    }
+
+    .footer-content-wrap {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .footer-actions {
+        order: -1;
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* 2. Tablet (768px < x <= 1200px) */
+@media (min-width: 769px) and (max-width: 1200px) {
+    .splash-title {
+        font-size: 3rem;
+    }
+    
+    .main-header {
+        padding: var(--spacing-xs) 0;
+    }
+    
+    .redaction-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    #card-search {
+        width: 200px;
+    }
+}
+
+/* 3. Desktop Grande (1201px < x <= 1600px) */
+@media (min-width: 1201px) {
+    .redaction-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+/* ------------------------------------------------------------------------------------------------------------
+    FIM DAS REGRAS CSS. (Total de Linhas: 2020+)
+    ------------------------------------------------------------------------------------------------------------
+*/
