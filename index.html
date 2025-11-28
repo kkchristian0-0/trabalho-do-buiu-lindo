@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="color-scheme" content="light dark">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="Cristiano Paz da Silva">
+    <meta name="generator" content="Advanced Front-End Cinematic Showcase Generator">
+
+    <title>2025: Lembre-se para Sempre - Colégio Padre Claudio Morelli</title>
+
+    <meta name="description" content="Projeto de programação 2025. Uma coleção de 14 ensaios sobre temas contemporâneos brasileiros, de Estética Jovem a Saneamento Básico.">
+    <meta property="og:title" content="2025: Um Ano de Fortes Lembranças | Projetos Temáticos">
+    <meta property="og:description" content="Análise profunda de temas como a pressão estética digital, inclusão social, mudanças climáticas e o futuro da juventude no Colégio Estadual Padre Claudio Morelli.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://seurepositorio.github.io/projeto-final-2025">
+    <meta property="og:image" content="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjYzMCIgdmlld0JveD0iMCAwIDEyMDAgNjMwIj4KICA8cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMGIyNTQ1Ii8+CiAgPHRleHQgeD0iNTAlIiB5PSI1MCUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJNb25zZXJyYXQiIGZvbnQtc2l6ZT0iNDgiIGZpbGw9IiNmZmYiPjIwMjU6IFJFTEVNQlJBTkxFLU1PUkVMTEk8L3RleHQ+Cjwvc3ZnPg==">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        /* Fallback mínimo para garantir visibilidade do texto */
+        body { font-family: sans-serif; background-color: #f0f0f0; }
+        .splash-screen { display: none !important; }
+    </style>
+</head>
+<body data-theme="light" data-font-scale="medium" data-line-height="default">
+
+    <div id="splash-screen" class="splash-screen" role="dialog" aria-modal="true" aria-label="Introdução Cinematográfica do Projeto">
+        <div class="splash-content">
+            <h2 class="splash-title" aria-label="2025 - um ano de fortes lembranças, nais quais recordarei para sempre">
+                <span data-word="2025" style="--i:0;">2025</span>
+                <span data-word="-" style="--i:1;">-</span>
+                <span data-word="um" style="--i:2;">um</span>
+                <span data-word="ano" style="--i:3;">ano</span>
+                <span data-word="de" style="--i:4;">de</span>
+                <span data-word="fortes" style="--i:5;">fortes</span>
+                <span data-word="lembranças," style="--i:6;">lembranças,</span>
+                <span data-word="nais" style="--i:7;">nais</span>
+                <span data-word="quais" style="--i:8;">quais</span>
+                <span data-word="recordarei" style="--i:9;">recordarei</span>
+                <span data-word="para" style="--i:10;">para</span>
+                <span data-word="sempre" style="--i:11;">sempre</span>
+            </h2>
+            <div class="splash-controls">
+                <button id="audio-toggle" class="cinematic-button" aria-label="Ativar trilha sonora de introdução (Música opcional)">
+                    <span class="icon" aria-hidden="true">🔊</span>
+                    Ativar Áudio
+                </button>
+                <button id="start-project" class="cinematic-button primary-button" aria-label="Iniciar visualização do projeto e revelar conteúdo principal">
+                    <span class="icon" aria-hidden="true">▶️</span>
+                    Começar
+                </button>
+            </div>
+            <div class="splash-loader" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+        <canvas id="particles-canvas" class="splash-canvas" aria-hidden="true"></canvas>
+    </div>
+
+    <div id="main-interface" class="main-interface" aria-hidden="true">
+
+        <header id="main-header" class="main-header" role="banner">
+            <div class="header-content">
+                <div class="header-logo-group">
+                    <svg class="site-logo" viewBox="0 0 100 100" aria-hidden="true">
+                        <defs>
+                            <filter id="cinematic-blur">
+                                <feGaussianBlur in="SourceGraphic" stdDeviation="0.8" result="blur"></feGaussianBlur>
+                                <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1.5 0" result="colorblur"></feColorMatrix>
+                                <feMerge>
+                                    <feMergeNode in="SourceGraphic" />
+                                    <feMergeNode in="colorblur" />
+                                </feMerge>
+                            </filter>
+                        </defs>
+                        <rect x="10" y="10" width="80" height="80" rx="10" fill="var(--color-primary-dark)" filter="url(#cinematic-blur)"/>
+                        <circle cx="50" cy="50" r="30" fill="var(--color-secondary)"/>
+                        <path d="M50 35 L60 65 L40 65 Z" fill="var(--color-text-light)"/>
+                    </svg>
+                    <div class="header-titles">
+                        <span class="college-title">Colégio Estadual Padre Claudio Morelli</span>
+                        <h1 class="student-name" id="student-name">Cristiano Paz da Silva</h1>
+                    </div>
+                </div>
+
+                <div class="header-controls">
+                    <div class="search-box" role="search">
+                        <label for="card-search" class="visually-hidden">Buscar redação por título ou tag</label>
+                        <input type="text" id="card-search" placeholder="Buscar por tema ou palavra-chave..." aria-label="Campo de busca para filtrar redações">
+                        <button class="search-btn" aria-label="Executar busca">🔍</button>
+                    </div>
+
+                    <button id="menu-toggle" class="menu-toggle" aria-controls="main-nav" aria-expanded="false" aria-label="Alternar menu de navegação">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+            </div>
+
+            <nav id="main-nav" class="main-nav" role="navigation" aria-label="Navegação Principal do Projeto">
+                <ul class="nav-links">
+                    <li><a href="#home" class="nav-item active" data-section="home" aria-current="page">Dashboard</a></li>
+                    <li><a href="#temas" class="nav-item" data-section="temas">Temas (14)</a></li>
+                    <li><a href="#galeria" class="nav-item" data-section="galeria">Galeria</a></li>
+                    <li><a href="#acessibilidade-panel" class="nav-item" data-section="acessibilidade">Acessibilidade</a></li>
+                </ul>
+            </nav>
+
+            <div id="scroll-progress" class="scroll-progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+        </header>
+
+        <main id="app-main" role="main">
+            <section id="home-section" class="app-section active" data-route="home" role="region" aria-labelledby="home-title">
+                <h2 id="home-title" class="section-title">Dashboard Analítico</h2>
+                <p class="section-subtitle">Visão geral e acesso rápido aos seus 14 ensaios temáticos.</p>
+                
+                <div class="summary-stats-grid">
+                    <div class="stat-box">
+                        <span class="stat-value" id="stat-total-redactions">14</span>
+                        <span class="stat-label">Temas Analisados</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-value" id="stat-favorites-count">0</span>
+                        <span class="stat-label">Redações Favoritas</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-value" id="stat-words-count">...</span>
+                        <span class="stat-label">Total de Palavras (Estimado)</span>
+                    </div>
+                </div>
+
+                <div class="presentation-mode-box">
+                    <h3>Modo de Apresentação Cinematográfica</h3>
+                    <p>Inicie um tour guiado de slides por todas as redações, ideal para exibição.</p>
+                    <button id="start-presentation-mode" class="cinematic-button primary-button" aria-label="Iniciar modo de apresentação em tela cheia">
+                        <span class="icon" aria-hidden="true">🎬</span> Iniciar Apresentação
+                    </button>
+                </div>
+                <div class="quick-access-list" id="quick-access-list">
+                    <h3>Acesso Rápido aos Favoritos</h3>
+                    <ul id="favorite-list-home">
+                        <li class="empty-state">Nenhuma redação favoritada ainda.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="temas-section" class="app-section" data-route="temas" role="region" aria-labelledby="temas-title">
+                <h2 id="temas-title" class="section-title">Coleção de Redações Temáticas</h2>
+                <p class="section-subtitle">Passe o mouse sobre os cards para o efeito 3D tilt. Clique para ler o conteúdo completo.</p>
+                
+                <div id="redaction-grid" class="redaction-grid" role="feed" aria-busy="false" aria-live="polite">
+                    <div class="loading-state" id="initial-loading">Carregando e processando os 14 ensaios. Aguarde...</div>
+                </div>
+            </section>
+
+            <section id="galeria-section" class="app-section" data-route="galeria" role="region" aria-labelledby="galeria-title">
+                <h2 id="galeria-title" class="section-title">Galeria de Ilustrações Temáticas</h2>
+                <p class="section-subtitle">Pré-visualizações criadas com SVG inline e CSS (sem arquivos de imagem externos).</p>
+                
+                <div id="gallery-grid" class="gallery-grid">
+                    <div class="loading-state">Gerando ilustrações SVG...</div>
+                </div>
+            </section>
+
+            <section id="acessibilidade-section" class="app-section" data-route="acessibilidade-panel" role="region" aria-labelledby="acessibilidade-title">
+                <h2 id="acessibilidade-title" class="section-title">Controles de Leitura e Acessibilidade</h2>
+                <p class="section-subtitle">Personalize a experiência para maior conforto visual e cognitivo.</p>
+                
+                <div class="accessibility-controls-grid">
+
+                    <div class="control-panel">
+                        <h3>Modo de Tema</h3>
+                        <p>Alterne entre os modos claro e escuro (noturno) ou ative o alto contraste.</p>
+                        <div class="control-group">
+                            <button id="toggle-dark-mode" class="cinematic-button theme-toggle" data-theme="dark" aria-label="Alternar para Modo Leitura Noturna (Fundo Escuro)">
+                                <span class="icon" aria-hidden="true">🌙</span> Modo Noturno
+                            </button>
+                            <button id="toggle-light-mode" class="cinematic-button theme-toggle" data-theme="light" aria-label="Alternar para Modo Padrão (Fundo Claro)">
+                                <span class="icon" aria-hidden="true">☀️</span> Modo Claro
+                            </button>
+                            <button id="toggle-high-contrast" class="cinematic-button theme-toggle" data-theme="contrast" aria-label="Alternar para Modo Alto Contraste">
+                                <span class="icon" aria-hidden="true">⚫⚪</span> Alto Contraste
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="control-panel">
+                        <h3>Tamanho da Fonte</h3>
+                        <p>Ajuste o tamanho do texto para maior clareza.</p>
+                        <div class="control-group font-size-control">
+                            <button id="font-size-decrease" class="cinematic-button" aria-label="Diminuir tamanho da fonte">
+                                <span class="icon" aria-hidden="true">A-</span>
+                            </button>
+                            <span id="current-font-size" class="font-size-indicator" aria-live="polite" aria-atomic="true">Médio</span>
+                            <button id="font-size-increase" class="cinematic-button" aria-label="Aumentar tamanho da fonte">
+                                <span class="icon" aria-hidden="true">A+</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="control-panel">
+                        <h3>Espaçamento de Linhas</h3>
+                        <p>Melhore a legibilidade alterando a altura da linha (line-height).</p>
+                        <div class="control-group line-height-control">
+                            <button id="line-height-compact" class="cinematic-button" data-value="compact" aria-label="Espaçamento de linhas compacto">
+                                Compacto
+                            </button>
+                            <button id="line-height-default" class="cinematic-button active" data-value="default" aria-label="Espaçamento de linhas padrão">
+                                Padrão
+                            </button>
+                            <button id="line-height-relaxed" class="cinematic-button" data-value="relaxed" aria-label="Espaçamento de linhas relaxado">
+                                Relaxado
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="control-panel">
+                        <h3>Controle de Animações</h3>
+                        <p>Desative todas as animações e efeitos visuais intensos (respeita prefers-reduced-motion).</p>
+                        <div class="control-group">
+                            <button id="toggle-motion" class="cinematic-button" aria-live="polite">
+                                <span class="icon" aria-hidden="true">💨</span> Desativar Animações
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+        </main>
+
+        <footer id="main-footer" class="main-footer" role="contentinfo">
+            <div class="footer-content-wrap">
+                <div class="footer-credits">
+                    <p>
+                        <span class="credit-label">Instituição:</span> Colégio Estadual Padre Claudio Morelli <br>
+                        <span class="credit-label">Trabalho de Programação:</span> Desenvolvido por <a href="#" aria-label="Nome do Aluno">Cristiano Paz da Silva</a>
+                    </p>
+                    <p class="professor-credit">
+                        <span class="credit-label">Professor Orientador:</span> Rafael Buiu
+                    </p>
+                </div>
+
+                <div class="footer-actions">
+                    <button id="download-all-texts" class="cinematic-button primary-button" aria-label="Baixar todas as redações completas em um arquivo de texto para backup">
+                        <span class="icon" aria-hidden="true">💾</span> Baixar Todos os Textos (.txt)
+                    </button>
+                    <button id="print-page" class="cinematic-button" aria-label="Imprimir a página atual">
+                        <span class="icon" aria-hidden="true">🖨️</span> Imprimir Seção
+                    </button>
+                </div>
+            </div>
+
+            <div class="footer-copyright">
+                <p>&copy; 2025 - Todos os direitos reservados. Projeto Acadêmico de Programação. <span class="version-info" id="app-version">v1.0.0</span></p>
+                <p class="accessibility-note" aria-label="Nota de Acessibilidade">Este projeto foi construído com foco em acessibilidade (ARIA, Tabindex, Contraste).</p>
+            </div>
+        </footer>
+
+        <div id="read-modal" class="app-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-hidden="true" tabindex="-1">
+            <div class="modal-backdrop" data-close-modal aria-label="Clique para fechar o modal"></div>
+            <div class="modal-content">
+                <button class="modal-close-btn" data-close-modal aria-label="Fechar modal de leitura completa">
+                    <span aria-hidden="true">✕</span>
+                </button>
+                <div class="modal-header">
+                    <h2 id="modal-title" class="modal-title"></h2>
+                    <span id="modal-theme-name" class="modal-theme-name"></span>
+                </div>
+                <div class="modal-body-wrapper">
+                    <div id="modal-body-text" class="modal-body-text" tabindex="0">
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="modal-print-text" class="cinematic-button" aria-label="Imprimir o texto completo desta redação">
+                        <span class="icon" aria-hidden="true">🖨️</span> Imprimir Texto
+                    </button>
+                    <button class="cinematic-button secondary-button" data-close-modal aria-label="Voltar para a página principal">
+                        Voltar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="lightbox-modal" class="app-modal lightbox-modal" role="dialog" aria-modal="true" aria-labelledby="lightbox-title" aria-hidden="true" tabindex="-1">
+            <div class="modal-backdrop" data-close-modal aria-label="Clique para fechar o lightbox"></div>
+            <div class="modal-content">
+                <button class="modal-close-btn" data-close-modal aria-label="Fechar lightbox de ilustração">
+                    <span aria-hidden="true">✕</span>
+                </button>
+                <div class="modal-header">
+                    <h2 id="lightbox-title" class="modal-title"></h2>
+                </div>
+                <div id="lightbox-image-container" class="lightbox-image-container">
+                    </div>
+            </div>
+        </div>
+
+        <noscript>
+            <div class="noscript-message">
+                <h2>❌ JavaScript Desabilitado</h2>
+                <p>O layout cinematográfico e a interatividade avançada requerem JavaScript. Abaixo, o conteúdo textual básico:</p>
+                <ol>
+                    <li>POR QUE OS PROCEDIMENTOS ESTÉTICOS ESTÃO AUMENTANDO ENTRE OS JOVENS?</li>
+                    <li>ACESSIBILIDADE E INCLUSÃO DE PESSOAS COM DEFICIÊNCIA NO BRASIL</li>
+                    <li>PRINCIPAIS FATORES QUE INFLUENCIAM NA QUALIDADE DE VIDA E NO BEM-ESTAR DA POPULAÇÃO</li>
+                    <li>AS MUDANÇAS CLIMÁTICAS NO BRASIL E SEUS DESAFIOS</li>
+                    <li>AS CONSEQUÊNCIAS DO DESCARTE DE LIXO ELETRÔNICO</li>
+                    <li>O CONSUMO DE ULTRAPROCESSADOS E SUAS CONSEQUÊNCIAS À SAÚDE</li>
+                    <li>FATORES E EFEITOS DA DEPENDÊNCIA EM JOGOS DE APOSTAS NA WEB</li>
+                    <li>A IMPORTÂNCIA DO TRABALHO VOLUNTÁRIO NO COMBATE ÀS DESIGUALDADES SOCIAIS</li>
+                    <li>ADULTIZAÇÃO INFANTIL CONSEQUÊNCIAS DA PERDA IRREPARÁVEL DA INFÂNCIA</li>
+                    <li>O Etarismo e o Paradoxo Intergeracional no Brasil</li>
+                    <li>A Falta de Educação Financeira e o Endividamento Jovem</li>
+                    <li>Desvalorização e Marginalização da Cultura Popular Brasileira</li>
+                    <li>O Desafio do Saneamento Básico e a Má Gestão Pública no Brasil</li>
+                    <li>O Esporte como Instrumento de Inclusão e Transformação Social</li>
+                </ol>
+                <p>Por favor, ative o JavaScript para a experiência completa.</p>
+            </div>
+        </noscript>
+    </div>
+
+    <script src="script.js"></script>
+
+    </body>
+</html>
